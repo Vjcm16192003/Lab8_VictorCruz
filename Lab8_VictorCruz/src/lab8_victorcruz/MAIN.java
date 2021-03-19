@@ -2,6 +2,7 @@ package lab8_victorcruz;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import static sun.util.calendar.CalendarUtils.mod;
@@ -20,6 +21,28 @@ public class MAIN extends javax.swing.JFrame {
         modelo.addElement("Ejecutivo");
         modelo.addElement("Decano");
         CB_Tipo.setModel(modelo);
+        CB_TipoBusc.setModel(modelo);
+        ArrayList usus = new ArrayList();
+        
+        
+        try{
+            Dba db = new Dba("./Database_Lab8.accdb");
+            db.conectar();
+            db.query.execute("select llave from persona"); 
+            ResultSet rs = db.query.getResultSet();
+            while (rs.next()) {
+
+                usus.add(rs.getInt(7));
+                DefaultComboBoxModel com = (DefaultComboBoxModel) CB_Busqueda.getModel();
+                com.addElement(rs.getInt(7));
+                CB_Busqueda.setModel(com);
+                //System.out.println(rs.getString(1));
+            }
+            
+            
+        }
+        catch(Exception e){}
+        
 
         
        
@@ -93,8 +116,14 @@ public class MAIN extends javax.swing.JFrame {
         modifcar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         JTA_Listar = new javax.swing.JTextArea();
-        jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        CB_Busqueda = new javax.swing.JComboBox<>();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        JTA_Lista = new javax.swing.JTextArea();
+        CB_TipoBusc = new javax.swing.JComboBox<>();
 
         jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -474,6 +503,11 @@ public class MAIN extends javax.swing.JFrame {
                 listarMouseClicked(evt);
             }
         });
+        listar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listarActionPerformed(evt);
+            }
+        });
 
         Eliminar.setText("Eliminar");
         Eliminar.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -529,19 +563,6 @@ public class MAIN extends javax.swing.JFrame {
 
         TP_MetodoAdmin.addTab("Metodos Administrativos", jPanel2);
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 876, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 517, Short.MAX_VALUE)
-        );
-
-        TP_MetodoAdmin.addTab("Busqueda", jPanel3);
-
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -555,11 +576,72 @@ public class MAIN extends javax.swing.JFrame {
 
         TP_MetodoAdmin.addTab("Filtración", jPanel4);
 
+        jButton1.setText("LLave Primaria");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
+
+        jButton2.setText("Tipo");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton2MouseClicked(evt);
+            }
+        });
+
+        JTA_Lista.setColumns(20);
+        JTA_Lista.setRows(5);
+        jScrollPane2.setViewportView(JTA_Lista);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(58, 58, 58)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 749, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(CB_Busqueda, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(89, 89, 89)
+                                .addComponent(CB_TipoBusc, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(101, 101, 101))))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(101, 101, 101)
+                        .addComponent(jButton1)
+                        .addGap(297, 297, 297)
+                        .addComponent(jButton2)))
+                .addContainerGap(69, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(42, 42, 42)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(CB_Busqueda, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+                    .addComponent(CB_TipoBusc))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
+                .addGap(53, 53, 53)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(39, Short.MAX_VALUE))
+        );
+
+        TP_MetodoAdmin.addTab("Busqueda", jPanel3);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(TP_MetodoAdmin, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(TP_MetodoAdmin)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -679,6 +761,26 @@ public class MAIN extends javax.swing.JFrame {
             com.removeAllElements();
             CB_Personas.setModel(com);
         }
+        if (TP_MetodoAdmin.getSelectedIndex() == 2) {
+            Dba db = new Dba("./Database_Lab8.accdb");
+            try {
+                db.conectar();
+                db.query.execute("select llave from persona");
+                ResultSet rs = db.query.getResultSet();
+                while (rs.next()) {
+                    DefaultComboBoxModel com = (DefaultComboBoxModel) CB_Busqueda.getModel();
+                    com.addElement(rs.getString(1));
+                    CB_Busqueda.setModel(com);
+                }
+            } catch (Exception e) {
+
+            }
+            db.desconectar();
+        } else {
+            DefaultComboBoxModel com = (DefaultComboBoxModel) CB_Busqueda.getModel();
+            com.removeAllElements();
+            CB_Busqueda.setModel(com);
+        }
 
         
     }//GEN-LAST:event_TP_MetodoAdminStateChanged
@@ -731,16 +833,23 @@ public class MAIN extends javax.swing.JFrame {
 
     private void listarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listarMouseClicked
         Dba db = new Dba("./Database_Lab8.accdb");
+        Persona per =(Persona)CB_Personas.getSelectedItem();
+       
+        System.out.println( per.getApellido());
         try {
             db.conectar();
-            db.query.execute("select nombre,apellido,llave from persona");
+            db.query.execute("select nombre,apellido from persona");
+            int llave_numero = (int)CB_Busqueda.getSelectedItem();
+            
+            db.query.execute("Select nombre * from persona where llave='" + llave_numero + "'" );
+            
             ResultSet rs = db.query.getResultSet();
             //String s=String.valueOf(i);
             
             while (rs.next()) {
                 
                 String l = "Nombre: "+rs.getInt(1) + ",  " +" Apellido: " + rs.getString(2)+"\n";
-                JTA_Listar.setText(l);
+                JTA_Listar.append(l);
             }
            
         } catch (SQLException ex) {
@@ -748,6 +857,18 @@ public class MAIN extends javax.swing.JFrame {
         }
         db.desconectar();
     }//GEN-LAST:event_listarMouseClicked
+
+    private void listarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_listarActionPerformed
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        
+    }//GEN-LAST:event_jButton1MouseClicked
+
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2MouseClicked
 
     
      public void Mod() {
@@ -793,13 +914,16 @@ public class MAIN extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> CB_Busqueda;
     private javax.swing.JComboBox<String> CB_Personas;
     private javax.swing.JComboBox<String> CB_Personas1;
     private javax.swing.JComboBox<String> CB_Tipo;
     private javax.swing.JComboBox<String> CB_Tipo2;
+    private javax.swing.JComboBox<String> CB_TipoBusc;
     private javax.swing.JButton CrearPersona;
     private javax.swing.JButton Eliminar;
     private javax.swing.JDialog JD_Modificar;
+    private javax.swing.JTextArea JTA_Lista;
     private javax.swing.JTextArea JTA_Listar;
     private javax.swing.JButton Modificar_;
     private javax.swing.ButtonGroup Sexo;
@@ -811,6 +935,8 @@ public class MAIN extends javax.swing.JFrame {
     private javax.swing.JTextField edad2;
     private javax.swing.JTextField facultad;
     private javax.swing.JTextField facultad2;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -843,6 +969,7 @@ public class MAIN extends javax.swing.JFrame {
     private javax.swing.JRadioButton jRadioButton5;
     private javax.swing.JRadioButton jRadioButton6;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jTextField11;
     private javax.swing.JTextField jTextField9;
